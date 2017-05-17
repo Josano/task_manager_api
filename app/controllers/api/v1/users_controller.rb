@@ -1,9 +1,14 @@
 class Api::V1::UsersController < ApplicationController
-  respont_to :json
+
+  respond_to :json
 
   def show
-    @users = User.find(params[:id])
-    respond_with @user
+    begin
+      @user = User.find(params[:id])
+      respond_with @user
+    rescue
+      head 404
+    end  
   end
 
 end

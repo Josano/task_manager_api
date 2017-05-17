@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-Rspec.describe 'Users API', type: :request do
+RSpec.describe 'Users API', type: :request do
   let!(:user) { create(:user) }
   let(:user_id) { user.id }
 
@@ -12,12 +12,25 @@ Rspec.describe 'Users API', type: :request do
       get "/users/#{user_id}", params: {}, headers: headers
     end
 
-    context "When the user exist" do
+    context "When the user exists" do
       it "returns the user" do
         user_response = JSON.parse(response.body)
-        except(user_response["id"]).to eq(user_id)
+        expect(user_response["id"]).to eq(user_id)
+      end
+
+      it "return status 200" do
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context "When the user exists" do
+      let(:user_id) {10000}
+
+      it "returns status code 404" do
+        expect(response).to have_http_status(404)
       end
     end
 
   end
+  
 end
